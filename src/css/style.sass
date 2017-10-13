@@ -1,0 +1,48 @@
+@import './2-partials/_base'
+
+h1
+  margin-top: $m
+  margin-bottom: $m
+
+section
+  padding: $m
+
+.skylor
+  background-color: $dark-grey
+  border: $xxs solid $green
+  border-radius: 1rem
+  display: inline-block
+  height: 20rem
+  width: 20rem
+
+.about
+  background-color: $dark-grey
+  box-sizing: border-box
+  border-top: $xxs solid $green
+  border-bottom: $xxs solid $green
+  color: $grey
+  display: flex
+  flex-wrap: wrap
+
+  & > div
+    padding: $m
+
+    &:first-child
+      border-bottom: $xxs solid $green
+
+    & > h3
+      margin-top: 0
+
+  h5
+    color: $green
+
+@media (min-width: 800px)
+  .about
+    flex-wrap: nowrap
+
+    & > div
+      flex: 0 1 50%
+
+      &:first-child
+        border-bottom: none
+        border-right: $xxs solid $green
