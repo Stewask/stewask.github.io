@@ -9,6 +9,7 @@ const autoprefixer = require('autoprefixer');
 
 const srcPath = path.join(__dirname, 'src');
 const buildPath = path.join(__dirname, 'build');
+const pugPath = path.join(srcPath, 'index.pug');
 
 const nodeEnv = process.env.NODE_ENV;
 const isProduction = nodeEnv === 'production';
@@ -135,8 +136,8 @@ const rules = [{
 
 const plugins = [
   new HtmlWebpackPlugin({
-    template: path.join(srcPath, 'index.pug'),
-    filename: '../index.html',
+    template: pugPath,
+    filename: isProduction ? '../index.html' : 'index.html',
     minify: false,
     injext: true
   }),
@@ -148,8 +149,8 @@ const plugins = [
     inject: true,
     persistentCache: false,
     icons: {
-      android: false,
-      appleIcon: false,
+      android: true,
+      appleIcon: true,
       appleStartup: false,
       coast: false,
       favicons: true,
@@ -209,11 +210,13 @@ module.exports = {
     inline: true,
     hot: true,
     port: 3001,
+    contentBase: [buildPath, pugPath],
+    watchContentBase: true
   },
   output: {
     path: buildPath,
     filename: path.join('js', 'bundle.js'),
-    publicPath: 'build/'
+    publicPath: isProduction ? 'build/' : '/'
   },
   module: {
     rules
