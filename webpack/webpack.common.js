@@ -127,7 +127,7 @@ const config = (env) => {
         template: paths.pug,
         filename: isProduction ? '../index.html' : 'index.html',
         minify: false,
-        injext: true
+        inject: true
       }),
       new webpack.ProgressPlugin(),
       new FaviconsWebpackPlugin({
