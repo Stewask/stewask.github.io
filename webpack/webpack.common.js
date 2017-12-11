@@ -1,12 +1,22 @@
-'use strict';
+import path from 'path';
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
+import { paths } from './util';
 
-const path = require('path');
-const webpack = require('webpack');
-const { cssAssetOpts, htmlAssetOpts, paths } = require('./util');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const baseOpts = mimetype => ({
+  context: paths.src,
+  name: '[path][name].[ext]',
+  mimetype
+});
 
-const config = (env) => {
+const cssAssetOpts = isProduction => mimetype => (
+  Object.assign({}, baseOpts(mimetype), {
+    publicPath: isProduction ? '../' : ''
+  })
+);
+
+export default env => {
   const isProduction = env === 'prod';
   const cssAsset = cssAssetOpts(isProduction);
 
@@ -26,18 +36,7 @@ const config = (env) => {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          query: {
-            presets: [
-              ['env', {
-                targets: {
-                  ie: 11
-                }
-              }]
-            ]
-          }
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.woff2?$/,
@@ -64,14 +63,14 @@ const config = (env) => {
         test: /\.pdf$/,
         use: {
           loader: 'file-loader',
-          options: htmlAssetOpts('application/pdf')
+          options: baseOpts('application/pdf')
         }
       },
       {
         test: /\.svg$/,
         use: [{
           loader: 'file-loader',
-          options: htmlAssetOpts('image/svg+xml')
+          options: baseOpts('image/svg+xml')
         },
         {
           loader: 'img-loader',
@@ -94,7 +93,7 @@ const config = (env) => {
         test: /\.png$/,
         use: [{
           loader: 'file-loader',
-          options: htmlAssetOpts('image/png')
+          options: baseOpts('image/png')
         },
         {
           loader: 'img-loader?minimize'
@@ -123,16 +122,9 @@ const config = (env) => {
       }]
     },
     plugins: [
-      new HtmlWebpackPlugin({
-        template: paths.pug,
-        filename: isProduction ? '../index.html' : 'index.html',
-        minify: false,
-        inject: true
-      }),
-      new webpack.ProgressPlugin(),
       new FaviconsWebpackPlugin({
-        logo: path.join(paths.src, 'assets', 'img', 'orion.png'),
-        prefix: path.join('assets', 'img', 'favicon-'),
+        logo: path.join(paths.src, paths.img, 'orion.png'),
+        prefix: path.join(paths.img, '/'),
         background: 'rgba(0, 0, 0, 0)',
         emitStats: false,
         inject: true,
@@ -149,9 +141,14 @@ const config = (env) => {
           yandex: false,
           windows: false
         }
-      })
+      }),
+      new HtmlWebpackPlugin({
+        template: paths.pug,
+        filename: isProduction ? '../index.html' : 'index.html',
+        minify: false,
+        inject: true
+      }),
+      new webpack.ProgressPlugin()
     ]
   };
 };
-
-module.exports = config;

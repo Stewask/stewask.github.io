@@ -1,9 +1,7 @@
-'use strict';
+import webpack from 'webpack';
+import { paths } from './util';
 
-const webpack = require('webpack');
-const { paths } = require('./util');
-
-const config = {
+export default {
   devtool: 'cheap-module-eval-source-map',
   devServer: {
     inline: true,
@@ -31,5 +29,3 @@ const config = {
     new webpack.NamedModulesPlugin()
   ]
 };
-
-module.exports = config;

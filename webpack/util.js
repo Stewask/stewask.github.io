@@ -1,27 +1,14 @@
-const path = require('path');
+import path from 'path';
 
-const src = path.join(__dirname, '..', 'src');
+const rootDir = path.join(__dirname, '..');
+const src = path.join(rootDir, 'src');
 
-exports.paths = {
-  src,
-  build: path.join(__dirname, '..', 'build'),
+export const paths = {
+  build: path.join(rootDir, 'build'),
+  css: path.join('css', 'bundle.css'),
+  img: path.join('assets', 'img'),
+  js: path.join('js', 'script.js'),
+  public: path.join('build', '/'),
   pug: path.join(src, 'index.pug'),
-  js: path.join('js', 'script.js')
+  src
 };
-
-const baseOpts = {
-  context: src,
-  name: '[path][name].[ext]'
-};
-
-exports.cssAssetOpts = isProduction => mimetype => (
-  Object.assign({}, baseOpts, {
-    mimetype,
-    publicPath: isProduction ? '../' : ''
-  })
-);
-
-exports.htmlAssetOpts = mimetype => Object.assign({}, baseOpts, {
-  mimetype,
-  publicPath: ''
-});
