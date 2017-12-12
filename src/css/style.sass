@@ -1,10 +1,15 @@
 @import './2-partials/_base'
 @import './1-modules/_mixins'
+@import './1-modules/_functions'
 
 h1
   color: $green
   margin-top: 0
   margin-bottom: 0
+  position: absolute
+  bottom: $m
+  left: 50%
+  transform: translateX(-50%)
 
 section
   box-sizing: border-box
@@ -13,10 +18,8 @@ section
 .landing
   background: url(../assets/img/green.jpg) no-repeat center
   background-size: cover
-  display: flex
-  align-items: flex-end
-  justify-content: center
-  height: 40vh
+  min-height: vmax-workaround(40)
+  position: relative
 
 .edu,
 .work
@@ -24,7 +27,7 @@ section
 
   background-color: $dark-grey
   color: $grey
-  min-height: 30vh
+  min-height: vmax-workaround(30)
 
   & > h3,
   & > h5
@@ -46,36 +49,60 @@ section
 
   padding: $m
 
-@media (min-width: 800px)
-  main
-    background: url(../assets/img/green.jpg) no-repeat center
-    background-size: cover
-    display: grid
-    grid-template: repeat(2, 1fr) / 2fr 1fr
-    height: 100vh
-
+@media (min-width: 320px)
   h1
-    margin-bottom: $m
+    white-space: nowrap
+
+@media (min-width: 800px)
+  // Layout for old browsers
+  .landing,
+  .edu,
+  .work
+    min-height: auto
 
   .landing
-    background: none
-    grid-row: 1 / 3
-    grid-column: 1 / 2
-    height: initial
+    height: 70vh
 
   .edu,
   .work
-    @include border('right')
-    @include border('left')
+    height: 30vh
 
-    background-color: rgba($dark-grey, .83)
-    color: $grey-300
-    grid-column: 2 / 3
-    text-align: left
+  // Use CSS Grid on browsers that support
+  @supports (grid-area: auto)
+    main
+      background: url(../assets/img/green.jpg) no-repeat center
+      background-size: cover
+      display: grid
+      grid-template: repeat(2, 1fr) / 2fr 1fr
+      height: 100vh
 
-  .edu
-    border-bottom: none
-    grid-row: 1 / 2
+    h1
+      margin-bottom: $m
 
-  .work
-    grid-row: 2 / 3
+    // Unset previous height declaration for old browsers
+    .landing,
+    .edu,
+    .work
+      height: initial
+
+    .landing
+      background: none
+      grid-row: 1 / 3
+      grid-column: 1 / 2
+
+    .edu,
+    .work
+      @include border('right')
+      @include border('left')
+
+      background-color: rgba($dark-grey, .83)
+      color: $grey-300
+      grid-column: 2 / 3
+      text-align: left
+
+    .edu
+      border-bottom: none
+      grid-row: 1 / 2
+
+    .work
+      grid-row: 2 / 3

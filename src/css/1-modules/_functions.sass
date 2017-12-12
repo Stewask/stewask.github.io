@@ -1,0 +1,3 @@
+// vmax is not supported in IE11 or Edge 15
+@function vmax-workaround($value)
+  @return calc(#{$value} * (1vw + 1vh - 1vmin))
