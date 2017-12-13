@@ -111,7 +111,7 @@ export default env => {
             minimize: true,
             mozjpeg: {
               progressive: true,
-              quality: 70
+              quality: 75
             }
           }
         }]
